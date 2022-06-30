@@ -1,0 +1,228 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model cmeta:id="INKCC" name="INKCC" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="../common/units.cellml">
+        <units name="current_units" units_ref="current_units"/>
+        <units name="voltage_units" units_ref="voltage_units"/>
+        <units name="time_units" units_ref="time_units"/>
+        <units name="conductance_units" units_ref="conductance_units"/>
+        <units name="millimolar" units_ref="millimolar"/>
+    </import>
+    <component name="m_Na_SM">
+        <variable name="Vm_SM" public_interface="in" units="voltage_units"/>
+        <variable name="m_inf_Na" units="dimensionless"/>
+        <variable name="tau_m_Na" units="time_units"/>
+        <variable initial_value="0.005" name="m_Na_SM" public_interface="out" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="time_units"/>
+        <variable name="T_correction_Na" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>m_inf_Na</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1.0</cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>Vm_SM</ci>
+                                    <cn cellml:units="voltage_units">47</cn>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="voltage_units">4.8</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>tau_m_Na</ci>
+                <apply>
+                    <times/>
+                    <ci>T_correction_Na</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Vm_SM</ci>
+                            <apply>
+                                <minus/>
+                                <cn cellml:units="Inverse_Voltage_units">0.017</cn>
+                            </apply>
+                            <cn cellml:units="time_units">1</cn>
+                        </apply>
+                        <cn cellml:units="time_units">0.440</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>m_Na_SM</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>m_inf_Na</ci>
+                        <ci>m_Na_SM</ci>
+                    </apply>
+                    <ci>tau_m_Na</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="h_Na_SM">
+        <variable name="Vm_SM" public_interface="in" units="voltage_units"/>
+        <variable name="h_inf_Na" units="dimensionless"/>
+        <variable name="tau_h_Na" units="time_units"/>
+        <variable initial_value="0.05787" name="h_Na_SM" public_interface="out" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="time_units"/>
+        <variable name="T_correction_Na" private_interface="none" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>h_inf_Na</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1.0</cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>Vm_SM</ci>
+                                    <cn cellml:units="voltage_units">78</cn>
+                                </apply>
+                                <cn cellml:units="voltage_units">3</cn>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>tau_h_Na</ci>
+                <apply>
+                    <times/>
+                    <ci>T_correction_Na</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <times/>
+                            <ci>Vm_SM</ci>
+                            <apply>
+                                <minus/>
+                                <cn cellml:units="Inverse_Voltage_units">0.25</cn>
+                            </apply>
+                            <cn cellml:units="time_units">1</cn>
+                        </apply>
+                        <cn cellml:units="time_units">5.50</cn>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>h_Na_SM</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>h_inf_Na</ci>
+                        <ci>h_Na_SM</ci>
+                    </apply>
+                    <ci>tau_h_Na</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="I_Na_SM">
+        <variable name="I_Na_SM" public_interface="out" units="current_units"/>
+        <variable name="E_Na" units="voltage_units"/>
+        <variable initial_value="3" name="G_max_Na_SM" units="conductance_units"/>
+        <variable name="Vm_SM" public_interface="in" units="voltage_units"/>
+        <variable name="h_Na_SM" private_interface="in" units="dimensionless"/>
+        <variable name="m_Na_SM" private_interface="in" units="dimensionless"/>
+        <variable name="RToF" public_interface="in" units="voltage_units"/>
+        <variable name="Na_o" private_interface="none" public_interface="in" units="millimolar"/>
+        <variable name="Na_i" private_interface="in" public_interface="out" units="millimolar"/>
+        <variable name="T_correction_Na" private_interface="out" public_interface="in" units="dimensionless"/>
+        <variable name="time" public_interface="in" units="time_units"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>E_Na</ci>
+                <apply>
+                    <times/>
+                    <ci>RToF</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <ci>Na_o</ci>
+                            <ci>Na_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_Na_SM</ci>
+                <apply>
+                    <times/>
+                    <ci>G_max_Na_SM</ci>
+                    <ci>h_Na_SM</ci>
+                    <ci>m_Na_SM</ci>
+                    <apply>
+                        <minus/>
+                        <ci>Vm_SM</ci>
+                        <ci>E_Na</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="h_Na_SM" component_2="I_Na_SM"/>
+        <map_variables variable_1="Vm_SM" variable_2="Vm_SM"/>
+        <map_variables variable_1="h_Na_SM" variable_2="h_Na_SM"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="T_correction_Na" variable_2="T_correction_Na"/>
+    </connection>
+    <connection>
+        <map_components component_1="m_Na_SM" component_2="I_Na_SM"/>
+        <map_variables variable_1="Vm_SM" variable_2="Vm_SM"/>
+        <map_variables variable_1="m_Na_SM" variable_2="m_Na_SM"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="T_correction_Na" variable_2="T_correction_Na"/>
+    </connection>
+    <group>
+        <relationship_ref relationship="encapsulation"/>
+        <component_ref component="I_Na_SM">
+            <component_ref component="h_Na_SM"/>
+            <component_ref component="m_Na_SM"/>
+        </component_ref>
+    </group>
+</model>

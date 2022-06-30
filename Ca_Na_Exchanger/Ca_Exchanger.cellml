@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model cmeta:id="Ca_Exchanger" name="J_CaSR_SM" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="../common/units.cellml">
+        <units name="current_units" units_ref="current_units"/>
+        <units name="voltage_units" units_ref="voltage_units"/>
+        <units name="time_units" units_ref="time_units"/>
+        <units name="conductance_units" units_ref="conductance_units"/>
+        <units name="millimolar" units_ref="millimolar"/>
+    </import>
+    <component name="J_CaSR_SM">
+        <variable name="J_CaSR_SM" public_interface="out" units="millimolar_per_millisecond"/>
+        <variable name="time" public_interface="in" units="time_units"/>
+        <variable initial_value="0.31705" name="J_max_CaSR" units="millimolar_per_millisecond"/>
+        <variable name="Ca_i" public_interface="in" units="millimolar"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>J_CaSR_SM</ci>
+                <apply>
+                    <times/>
+                    <ci>J_max_CaSR</ci>
+                    <apply>
+                        <power/>
+                        <apply>
+                            <times/>
+                            <ci>Ca_i</ci>
+                            <cn cellml:units="per_millimolar">1.0</cn>
+                        </apply>
+                        <cn cellml:units="dimensionless">1.34</cn>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+        <variable initial_value="0" name="m" public_interface="out" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>m</ci>
+                </apply>
+                <cn cellml:units="dimensionless">1</cn>
+            </apply>
+        </math>
+    </component>
+</model>

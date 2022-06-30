@@ -1,0 +1,230 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<model cmeta:id="Rectifying_K_Channel" name="Ikr" xmlns="http://www.cellml.org/cellml/1.1#" xmlns:cellml="http://www.cellml.org/cellml/1.1#" xmlns:cmeta="http://www.cellml.org/metadata/1.0#" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <import xlink:href="../common/units.cellml">
+        <units name="current_units" units_ref="current_units"/>
+        <units name="voltage_units" units_ref="voltage_units"/>
+        <units name="time_units" units_ref="time_units"/>
+        <units name="conductance_units" units_ref="conductance_units"/>
+        <units name="millimolar" units_ref="millimolar"/>
+    </import>
+    <component name="xr1_SM">
+        <variable name="Vm_SM" public_interface="in" units="voltage_units"/>
+        <variable name="time" public_interface="in" units="time_units"/>
+        <variable name="xr1_inf_SM" units="dimensionless"/>
+        <variable name="tau_xr1_SM" units="time_units"/>
+        <variable initial_value="0.0" name="xr1_SM" public_interface="out" units="dimensionless"/>
+        <variable name="T_correction_K" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>xr1_inf_SM</ci>
+                <apply>
+                    <divide/>
+                    <cn cellml:units="dimensionless">1.0</cn>
+                    <apply>
+                        <plus/>
+                        <cn cellml:units="dimensionless">1.0</cn>
+                        <apply>
+                            <exp/>
+                            <apply>
+                                <divide/>
+                                <apply>
+                                    <plus/>
+                                    <ci>Vm_SM</ci>
+                                    <cn cellml:units="voltage_units">27</cn>
+                                </apply>
+                                <apply>
+                                    <minus/>
+                                    <cn cellml:units="voltage_units">5.0</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>tau_xr1_SM</ci>
+                <apply>
+                    <times/>
+                    <ci>T_correction_K</ci>
+                    <cn cellml:units="time_units">80</cn>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>xr1_SM</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>xr1_inf_SM</ci>
+                        <ci>xr1_SM</ci>
+                    </apply>
+                    <ci>tau_xr1_SM</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="xr2_SM">
+        <variable name="Vm_SM" public_interface="in" units="voltage_units"/>
+        <variable name="time" public_interface="in" units="time_units"/>
+        <variable name="xr2_inf_SM" units="dimensionless"/>
+        <variable name="tau_xr2_SM" units="time_units"/>
+        <variable initial_value="0.82" name="xr2_SM" public_interface="out" units="dimensionless"/>
+        <variable name="T_correction_K" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>xr2_inf_SM</ci>
+                <apply>
+                    <plus/>
+                    <cn cellml:units="dimensionless">0.2</cn>
+                    <apply>
+                        <divide/>
+                        <cn cellml:units="dimensionless">0.8</cn>
+                        <apply>
+                            <plus/>
+                            <cn cellml:units="dimensionless">1.0</cn>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <plus/>
+                                        <ci>Vm_SM</ci>
+                                        <cn cellml:units="voltage_units">58</cn>
+                                    </apply>
+                                    <cn cellml:units="voltage_units">10</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>tau_xr2_SM</ci>
+                <apply>
+                    <times/>
+                    <ci>T_correction_K</ci>
+                    <apply>
+                        <plus/>
+                        <apply>
+                            <minus/>
+                            <cn cellml:units="time_units">707</cn>
+                        </apply>
+                        <apply>
+                            <times/>
+                            <cn cellml:units="time_units">1481</cn>
+                            <apply>
+                                <exp/>
+                                <apply>
+                                    <divide/>
+                                    <apply>
+                                        <plus/>
+                                        <ci>Vm_SM</ci>
+                                        <cn cellml:units="voltage_units">36</cn>
+                                    </apply>
+                                    <cn cellml:units="voltage_units">95</cn>
+                                </apply>
+                            </apply>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <apply>
+                    <diff/>
+                    <bvar>
+                        <ci>time</ci>
+                    </bvar>
+                    <ci>xr2_SM</ci>
+                </apply>
+                <apply>
+                    <divide/>
+                    <apply>
+                        <minus/>
+                        <ci>xr2_inf_SM</ci>
+                        <ci>xr2_SM</ci>
+                    </apply>
+                    <ci>tau_xr2_SM</ci>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <component name="I_kr_SM">
+        <variable name="I_kr_SM" public_interface="out" units="current_units"/>
+        <variable name="Vm_SM" public_interface="in" units="voltage_units"/>
+        <variable name="time" public_interface="in" units="time_units"/>
+        <variable name="E_K" public_interface="out" units="voltage_units"/>
+        <variable initial_value="35" name="G_max_kr_SM" units="conductance_units"/>
+        <variable name="xr1_SM" private_interface="in" units="dimensionless"/>
+        <variable name="xr2_SM" private_interface="in" units="dimensionless"/>
+        <variable name="RToF" public_interface="in" units="voltage_units"/>
+        <variable name="K_o" public_interface="in" units="millimolar"/>
+        <variable name="K_i" public_interface="in" units="millimolar"/>
+        <variable name="T_correction_K" private_interface="out" public_interface="in" units="dimensionless"/>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <apply>
+                <eq/>
+                <ci>E_K</ci>
+                <apply>
+                    <times/>
+                    <ci>RToF</ci>
+                    <apply>
+                        <ln/>
+                        <apply>
+                            <divide/>
+                            <ci>K_o</ci>
+                            <ci>K_i</ci>
+                        </apply>
+                    </apply>
+                </apply>
+            </apply>
+            <apply>
+                <eq/>
+                <ci>I_kr_SM</ci>
+                <apply>
+                    <times/>
+                    <ci>G_max_kr_SM</ci>
+                    <ci>xr1_SM</ci>
+                    <ci>xr2_SM</ci>
+                    <apply>
+                        <minus/>
+                        <ci>Vm_SM</ci>
+                        <ci>E_K</ci>
+                    </apply>
+                </apply>
+            </apply>
+        </math>
+    </component>
+    <connection>
+        <map_components component_1="xr1_SM" component_2="I_kr_SM"/>
+        <map_variables variable_1="Vm_SM" variable_2="Vm_SM"/>
+        <map_variables variable_1="xr1_SM" variable_2="xr1_SM"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+    </connection>
+    <connection>
+        <map_components component_1="xr2_SM" component_2="I_kr_SM"/>
+        <map_variables variable_1="Vm_SM" variable_2="Vm_SM"/>
+        <map_variables variable_1="xr2_SM" variable_2="xr2_SM"/>
+        <map_variables variable_1="time" variable_2="time"/>
+        <map_variables variable_1="T_correction_K" variable_2="T_correction_K"/>
+    </connection>
+    <group>
+        <relationship_ref relationship="encapsulation"/>
+        <component_ref component="I_kr_SM">
+            <component_ref component="xr1_SM"/>
+            <component_ref component="xr2_SM"/>
+        </component_ref>
+    </group>
+</model>
